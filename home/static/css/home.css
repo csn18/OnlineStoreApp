@@ -1,0 +1,25 @@
+
+
+#page {
+    background: rgba(0, 0, 0, 0.5) url('https://images.wallpaperscraft.ru/image/gory_tuman_derevya_nebo_118876_2560x1080.jpg') no-repeat center center fixed;
+    background-size: 120%;
+    background-blend-mode: darken;
+    height: 950px;
+}
+
+
+#text {
+    margin-top: 350px;
+}
+
+#h1_page_2 {
+    font-size: 80px;
+    color: silver;
+    text-align: center;
+}
+
+#h3_page_2 {
+    font-size: 45px;
+    color: silver;
+    text-align: center;
+}
