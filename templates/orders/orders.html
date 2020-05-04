@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert.css' %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+          crossorigin="anonymous"></script>
+
+  <script src="{% static 'js/wow.min.js' %}"></script>
+  <script src="{% static 'js/orders.js' %}"></script>
+  <script src="{% static 'js/sweetalert.js' %}"></script>
+
+  <title>Заказы</title>
+</head>
+<body>
+
+<div class="page-2">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08"
+            aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+      <ul class="navbar-nav">
+        <li class="nav-item wow fadeIn">
+          <a class="nav-link" href="{% url 'home' %}">Главная<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active wow fadeIn">
+          <a class="nav-link" href="{% url 'orders' %}">Заказы</a>
+        </li>
+        <li class="nav-item wow fadeIn">
+          <a class="nav-link" href="{% url 'shop' %}">Магазин</a>
+        </li>
+        <li class="nav-item wow fadeIn">
+          <a class="nav-link" href="{% url 'info' %}">Информация о заказах</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <form id="items" method="post">
+    {% csrf_token %}
+
+    <div class="container" id="content">
+      <div class="container wow fadeIn" data-wow-duration="3s">
+        <div class="text-in-order">
+          <h1><strong>ШАГ 1. ПРОВЕРЬТЕ ЗАКАЗ</strong></h1>
+        </div>
+      </div>
+
+      <div class="container wow zoomIn" data-wow-duration="1s">
+        <div id="order_form">
+          <div class="container">
+            <div id="order">
+              {% if not product_in_basket %}
+                <div class="row">
+
+                  <div class="col-5">
+                    <h4>Название</h4>
+                  </div>
+                  <br>
+
+                  <div class="col-2">
+                    <h4>Количество</h4>
+                  </div>
+
+                  <div class="col-2">
+                    <h4>Цена</h4>
+                  </div>
+
+                  <div class="col-2">
+                    <h4>Итог</h4>
+                  </div>
+
+                  <div class="col-1">
+                  </div>
+                </div>
+
+                <div class="overflow-auto" id="list_orders">
+
+                  {% for product_in_basket in products_in_basket %}
+
+                    <div class="item-in-order wow zoomIn" data-wow-delay="0.5s">
+                      <div class="row">
+
+                        <div class="col-5" id="text_item">
+                          <h5 class="text-name">{{ product_in_basket.product.name }}</h5>
+                        </div>
+
+                        <div class="col-2" id="text_item">
+                          <label for="number">
+                            <input value="{{ product_in_basket.nmb }}" class="product-nmb" type="number" id="number"
+                                   max="99" min="1" name="product_in_basket_{{ product_in_basket.id }}">
+                          </label>
+                        </div>
+
+                        <div class="col-2" id="text_item">
+                      <span class="product-price">
+                        <h5>{{ product_in_basket.price_per_item }}₽</h5>
+                      </span>
+                        </div>
+
+                        <div class="col-2" id="text_item">
+                          <h5 class="total-price-in-basket">{{ product_in_basket.total_price }}₽</h5>
+                        </div>
+
+                        <div class="col-1 cross-box">
+                          <div class="cross-button">
+                            <a href="#" id="cross" data-item_id="{{ product_in_basket.id }}"></a>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  {% endfor %}
+
+                </div>
+                <div class="text-center">
+                  <b>Общая сумма заказа: </b><span id="total_order_amount"></span>₽
+                </div>
+              {% else %}
+                <div class="cases">
+                  <h3>У ВАС НЕТ ЗАКАЗОВ</h3>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="scroll-btn wow flash" data-wow-duration="5s" data-wow-iteration="9999">
+          <h4><a href="#" id="scroll">ДАЛЕЕ</a></h4>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container" id="form">
+      <div class="text-in-form wow fadeIn" data-wow-duration="3s">
+        <h1><strong>ШАГ 2. ЗАПОЛНИТЕ И ПРОВЕРЬТЕ ВВЕДЕННЫЕ ДАННЫЕ</strong></h1>
+      </div>
+      <div class="form-to-order wow zoomIn">
+        <div class="form-name">
+          <h5>ЛИЧНЫЕ ДАННЫЕ</h5>
+          <div class="row">
+            <div class="col-4">
+              <label>
+                <input class="form-control" type="text" name="{{ form.last_name.html_name }}" placeholder="Фамилия">
+              </label>
+            </div>
+            <div class="col-4">
+              <label>
+                <input class="form-control" type="text" name="{{ form.first_name.html_name }}" placeholder="Имя">
+              </label>
+            </div>
+            <div class="col-4">
+              <label>
+                <input class="form-control" type="text" name="{{ form.email.html_name }}" placeholder="Email">
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-horizontal form-data" id="form_address">
+          <h5>КОНТАКТНАЯ ИНФОРМАЦИЯ</h5>
+          <div class="row">
+            <div class="col-4">
+              <label>
+                <input class="form-control" type="text" name="{{ form.phone.html_name }}" placeholder="Номер телефона">
+              </label>
+            </div>
+            <div class="col-4">
+              <label>
+                <input class="form-control" type="text" name="{{ form.country_city.html_name }}"
+                       placeholder="Страна / Город">
+              </label>
+            </div>
+            <div class="col-4">
+              <label>
+                <input class="form-control" type="text" name="{{ form.adr.html_name }}"
+                       placeholder="ул / дом / квартира ">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="to-info-btn wow flash text-center" data-wow-duration="3s" data-wow-iteration="9999">
+          <a class="link" href="#" id="scroll_to_top">НАВЕРХ</a>
+          <button class="btn btn-link" type="submit" id="to_order">ЗАКАЗАТЬ</button>
+        </div>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

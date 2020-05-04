@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+          crossorigin="anonymous"></script>
+
+  <script src="{% static 'js/wow.min.js' %}"></script>
+  <script src="{% static 'js/shop.js' %}"></script>
+  <script src="{% static 'js/sweetalert.js' %}"></script>
+
+  <title>{{ product.name }}</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08"
+          aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+    <ul class="navbar-nav">
+      <li class="nav-item wow fadeIn">
+        <a class="nav-link" href="{% url 'home' %}">Главная<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item wow fadeIn">
+        <a class="nav-link" href="{% url 'orders' %}">Заказы</a>
+      </li>
+      <li class="nav-item wow fadeIn">
+        <a class="nav-link" href="{% url 'shop' %}">Магазин</a>
+      </li>
+      <li class="nav-item wow fadeIn">
+        <a class="nav-link" href="{% url 'info' %}">Информация о заказах</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav" id="orders">
+      <li class="nav-item wow fadeIn">
+        <div class="basket-container">
+          <a class="nav-link" id="order_in_product">Заказы
+            <span id="count_orders">
+            {% if product_total_nmb %}
+              {{ product_total_nmb }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+          </a>
+          <div class="basket-item hidden">
+            {% if product_total_nmb == 0 %}
+              <div id=text_in_basket>
+                <h5>ЗАКАЗОВ ПОКА НЕТ</h5>
+              </div>
+            {% else %}
+              <div class="row" id="row_text">
+                <div class="col-6" id="name_text">Название</div>
+                <hr>
+                <div class="col-2" id="count_text">Кол-во</div>
+                <hr>
+                <div class="col-3" id="price_text">Цена</div>
+                <hr>
+                <div class="col-1"></div>
+              </div>
+            {% endif %}
+
+            {% csrf_token %}
+            <div class="row" id="order_text">
+              {% for product in list_order %}
+                <div class="col-6" id="name_order">{{ product.name }}</div>
+                <div class="col-2" id="count_order">{{ product.nmb }}</div>
+                <div class="col-3" id="toggle_price">{{ product.price }} <b>₽</b></div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container wow fadeIn">
+  <div id="product">
+    <div class="row">
+
+      <div class="col-8">
+        <div id="product_name">
+          <h3>{{ products.name }}</h3>
+          <hr>
+        </div>
+        <div class="img-center">
+          {% for image_item in products.productimg_set.all %}
+            <img class="img text-center" id="product_image" src="{{ image_item.image.url }}" alt="">
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-4" id="price">
+        <h3>{{ products.price }}₽</h3>
+        <hr>
+        <h5><strong>ОПИСАНИЕ</strong></h5>
+        <p>{{ products.description }}</p>
+
+        <form id="form_submit" action="{% url 'basket' %}">
+          {% csrf_token %}
+          <label for="nmb">
+            <input type="number" id="nmb" value="1" min="1" max="99" class="form-control" placeholder="Колличество">
+          </label>
+          <div>
+            <button class="btn btn-dark mt-2" id="btn_submit" type="submit"
+                    data-product_id="{{ products.id }}"
+                    data-product_name="{{ products.name }}"
+                    data-product_price="{{ products.price }}"
+            >Добавить в корзину
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
