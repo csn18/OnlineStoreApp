@@ -3,14 +3,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
   <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
           crossorigin="anonymous"></script>
+
   <script src="{% static 'js/wow.min.js' %}"></script>
   <script src="{% static 'js/home.js' %}"></script>
+
   <title>Главная</title>
 </head>
 <body>
@@ -23,53 +28,43 @@
 
     <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
       <ul class="navbar-nav">
-        <li class="nav-item active wow fadeIn">
+        <li class="nav-item active wow zoomIn" data-wow-delay="1.4s">
           <a class="nav-link" href="{% url 'home' %}">Главная<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item wow fadeIn">
-          <a class="nav-link" href="{% url 'shop' %}">Store</a>
+        <li class="nav-item wow zoomIn" data-wow-delay="1.7s">
+          <a class="nav-link" href="{% url 'orders' %}">Заказы</a>
         </li>
-        <li class="nav-item wow fadeIn">
-          <a class="nav-link" href="{% url 'order' %}">Заказы</a>
+        <li class="nav-item wow zoomIn" data-wow-delay="1.9s">
+          <a class="nav-link" href="{% url 'shop' %}">Магазин</a>
         </li>
-        <li class="nav-item wow fadeIn">
-          <a class="nav-link" href="#">Профиль</a>
+        <li class="nav-item wow zoomIn" data-wow-delay="2.1s">
+          <a class="nav-link" href="{% url 'info' %}">Информация о заказах</a>
         </li>
       </ul>
     </div>
   </nav>
 
 
-  <div class="container wow fadeIn">
+  <div class="container wow zoomIn" data-wow-delay="0.7s">
     <div id="text">
-      <h1 id="h3_page_2"><strong>ОЗНАКОМИТЬСЯ С ПРОДУКЦИЕЙ</strong></h1>
-      <h3 id="h3_page_2">В МАГАЗИНЕ</h3>
+      <h1><strong>ОЗНАКОМИТЬСЯ С ПРОДУКЦИЕЙ</strong></h1>
+      <h3>В МАГАЗИНЕ</h3>
     </div>
   </div>
-</div>
 
-<div class="section wow fadeIn">
-  <div class="container">
-    <div id="h3_section">
-      <h3>НОВЫЕ</h3>
-    </div>
-    <div class="row">
-      {% for product_image in products_images %}
-        <div class="col-4">
-          <div id="product-item">
-            <div>
-              <a href="{% url 'product' product_image.product.id %}"></a>
-              <img id="image_home" src="{{ product_image.image.url }}" alt="">
-            </div>
-            <div id="name_product">
-              {{ product_image.product.name }}
-            </div>
-            <a id="home_href" href="{% url 'product' product_image.product.id %}">Подробнее</a>
-          </div>
-        </div>
-      {% endfor %}
+  <div class="connection wow zoomIn" data-wow-delay="2.3s">
+    <h5>ОБРАТНАЯ СВЯЗЬ</h5>
+    <div class="icon-connect text-center wow zoomIn" data-wow-delay="2.5s">
+      <a href="https://github.com/csn18">
+        <img src="{% static 'css/img/git_icon.png' %}" alt="" id="img_href">
+      </a>
+      <a href="https://teleg.one/f0rest18">
+        <img src="{% static 'css/img/telegram_icon.png' %}" alt="" id="img_href">
+      </a>
     </div>
   </div>
+
+
 </div>
 
 </body>

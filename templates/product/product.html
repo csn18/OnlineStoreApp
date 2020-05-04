@@ -3,15 +3,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200; 300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
   <script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
           crossorigin="anonymous"></script>
+
   <script src="{% static 'js/wow.min.js' %}"></script>
   <script src="{% static 'js/shop.js' %}"></script>
+  <script src="{% static 'js/sweetalert.js' %}"></script>
+
   <title>{{ product.name }}</title>
 </head>
 <body>
@@ -27,45 +34,52 @@
         <a class="nav-link" href="{% url 'home' %}">Главная<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item wow fadeIn">
-        <a class="nav-link" href="{% url 'shop' %}">Store</a>
+        <a class="nav-link" href="{% url 'orders' %}">Заказы</a>
       </li>
       <li class="nav-item wow fadeIn">
-        <a class="nav-link" href="#">Профиль</a>
+        <a class="nav-link" href="{% url 'shop' %}">Магазин</a>
+      </li>
+      <li class="nav-item wow fadeIn">
+        <a class="nav-link" href="{% url 'info' %}">Информация о заказах</a>
       </li>
     </ul>
     <ul class="navbar-nav" id="orders">
       <li class="nav-item wow fadeIn">
         <div class="basket-container">
-          <a class="nav-link" id="order_in_product">Заказы <span id="count_orders">
+          <a class="nav-link" id="order_in_product">Заказы
+            <span id="count_orders">
             {% if product_total_nmb %}
               {{ product_total_nmb }}
-              {% else %}
+            {% else %}
               0
             {% endif %}
-          </span></a>
+          </span>
+          </a>
           <div class="basket-item hidden">
-            <div class="row" id="row_text">
-              <div class="col-2" id="photo_text">Фото</div>
-              <hr>
-              <div class="col-6" id="name_text">Название</div>
-              <hr>
-              <div class="col-2" id="count_text">Кол-во</div>
-              <hr>
-              <div class="col-2" id="price_text">Цена</div>
-              <hr>
-            </div>
-            {% for product in products_items %}
+            {% if product_total_nmb == 0 %}
+              <div id=text_in_basket>
+                <h5>ЗАКАЗОВ ПОКА НЕТ</h5>
+              </div>
+            {% else %}
+              <div class="row" id="row_text">
+                <div class="col-6" id="name_text">Название</div>
+                <hr>
+                <div class="col-2" id="count_text">Кол-во</div>
+                <hr>
+                <div class="col-3" id="price_text">Цена</div>
+                <hr>
+                <div class="col-1"></div>
+              </div>
+            {% endif %}
+
+            {% csrf_token %}
             <div class="row" id="order_text">
-              <div class="col-2" id="photo_order"></div>
-              <hr>
-              <div class="col-6" id="name_order">{{ product.product.name }}</div>
-              <hr>
-              <div class="col-2" id="count_order">{{ product_total_nmb }}</div>
-              <hr>
-              <div class="col-2" id="toggle_price">{{ product.prpduct.price }}</div>
-              <hr>
+              {% for product in list_order %}
+                <div class="col-6" id="name_order">{{ product.name }}</div>
+                <div class="col-2" id="count_order">{{ product.nmb }}</div>
+                <div class="col-3" id="toggle_price">{{ product.price }} <b>₽</b></div>
+              {% endfor %}
             </div>
-            {% endfor %}
           </div>
         </div>
       </li>
@@ -82,9 +96,9 @@
           <h3>{{ products.name }}</h3>
           <hr>
         </div>
-        <div>
+        <div class="img-center">
           {% for image_item in products.productimg_set.all %}
-            <img class="img-fluid" id="product_image" src="{{ image_item.image.url }}" alt="">
+            <img class="img text-center" id="product_image" src="{{ image_item.image.url }}" alt="">
           {% endfor %}
         </div>
       </div>
@@ -98,7 +112,7 @@
         <form id="form_submit" action="{% url 'basket' %}">
           {% csrf_token %}
           <label for="nmb">
-            <input type="number" id="nmb" class="form-control" placeholder="Колличество">
+            <input type="number" id="nmb" value="1" min="1" max="99" class="form-control" placeholder="Колличество">
           </label>
           <div>
             <button class="btn btn-dark mt-2" id="btn_submit" type="submit"

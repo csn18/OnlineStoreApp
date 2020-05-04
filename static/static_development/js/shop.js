@@ -16,25 +16,30 @@ $(document).ready(function () {
         data['csrfmiddlewaretoken'] = $('#form_submit [name="csrfmiddlewaretoken"]').val()
 
         let url = $('form').attr('action')
+        console.log(data)
 
         $.ajax({
             url: url,
             type: 'POST',
             data: data,
             success: function (data) {
-                console.log(data['products'])
+                swal('Отлично!', 'Товар добавлен в корзину', 'success')
                 if (data['products']) {
+                    $('#order_text').html('')
+                    $('#text_in_basket').detach()
+                    $('.cont').html('')
+                    $('#count_orders').html('').append(data['products']['length'])
                     $.each(data['products'], function (key, value) {
-                        $('#name_order').empty().append(value.name)
-                        $('#count_order').empty().append(value.nmb)
-                        $('#toggle_price').empty().append(value.price)
+                        $('#order_text').append('<div class="col-6" id="name_order">' + value.name + '</div>')
+                        $('#order_text').append('<div class="col-2" id="count_order">' + value.nmb + '</div>')
+                        $('#order_text').append('<div class="col-3" id="toggle_price">' + value.price + '</div>')
+
                     })
                 }
             }
         })
-
-
     })
+
 
     function showHidden(selector) {
         $(selector).removeClass('hidden')
@@ -58,6 +63,13 @@ $(document).ready(function () {
         addHidden('.basket-item')
     })
 
+    $(document).scroll(function () {
+        $('#scroll_to_top').fadeIn(200);
+    })
+    $('#scroll_to_top').click(function () {
+        console.log('scroll')
+        $('body,html').animate({scrollTop: 0}, 1000);
+    })
+
 });
 
-// '<li>' + product_name + ' ' + product_price + '₽' + 'Кол-во' + data['total-nmb'] + '</li>'
