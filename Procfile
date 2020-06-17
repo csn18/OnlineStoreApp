@@ -1,1 +1,1 @@
-web: gunicorn OnlineStoreApp:wsgi
+web: gunicorn OnlineStoreApp.wsgi
